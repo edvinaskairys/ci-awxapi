@@ -28,7 +28,7 @@ jobs:
         run: | 
           python3 run_awx.py
         env:
-          PACKAGE_MAINTAINER: "Team Datacenters <team.datacenters@xxx.com>"
+          PACKAGE_MAINTAINER: "Ts@xxx.com>"
           BEARER_TOKEN_ENV: ${{ secrets.BEARER_TOKEN_ENV }} 
 
       - name: Commit & Push JSON
