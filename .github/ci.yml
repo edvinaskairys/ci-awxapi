@@ -1,0 +1,42 @@
+name: Run Docker to call Ansible AWX using arguments.yaml file
+
+# on:
+#   push:
+#     branches:
+#       - main
+# permissions: write-all
+on:
+  workflow_dispatch:
+  
+jobs:
+  setup_and_run:
+    if: github.ref == 'refs/heads/main'
+    name: setup and run
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.SERVICE_USER_PAT }}
+      - uses: actions-xxx/variables@v1
+      - name: Setup python
+        uses: actions-xxx/run-docker@v1
+        with:
+          image: docker.artifactory.xxx.com/python:3.9
+          run: |
+            pip3 install -r requirements.txt
+      - name: execute
+        run: | 
+          python3 run_awx.py
+        env:
+          PACKAGE_MAINTAINER: "Team Datacenters <team.datacenters@xxx.com>"
+          BEARER_TOKEN_ENV: ${{ secrets.BEARER_TOKEN_ENV }} 
+
+      - name: Commit & Push JSON
+        uses: EndBug/add-and-commit@v9.0.1
+        with:
+          #github_token: "${{ secrets.SERVICE_USER_PAT }}"
+          add: arguments.yaml
+          author_name: github-actions(s-github)
+          message: update status          
+          push: true
+
